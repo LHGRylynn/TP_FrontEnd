@@ -10,13 +10,14 @@
         <el-form-item label="Password">
           <el-input type="password" v-model="password"></el-input>
 		  <el-button type="text" class="register" @click="registerVisible = true">注册</el-button>
+      <el-button type="text" class="forget" @click="forgetVisible = true">忘记密码?找回密码</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" v-on:click="login">Login</el-button>
         </el-form-item>
       </el-form>
     </el-card>
-	<el-dialog title="Matrix Register" :visible.sync="registerVisible" width="30%" :modal-append-to-body="false">
+	<el-dialog title="Matrix Register" :visible.sync="registerVisible" width="30%" :modal-append-to-body="false" >
 		<el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 			<el-form-item label="User name">
 			  <el-input v-model="registerUserName"></el-input>
@@ -32,6 +33,19 @@
 			</el-form-item>
 		</el-form>
 	</el-dialog>
+  <el-dialog title="Matrix Forget" :visible.sync="forgetVisible" width="30%" :modal-append-to-body="false" >
+    <el-form :model="forgetForm"  ref="forgetForm" label-width="100px" class="demo-forgetForm">
+			<el-form-item label="emailAddress">
+			  <el-input v-model="forgetForm.emailAddress" ></el-input>
+			</el-form-item>
+			<el-form-item label="name">
+			  <el-input v-model="userName"></el-input>
+			</el-form-item>
+			<el-form-item>
+		      <el-button type="primary" v-on:click="forget">找回密码</el-button>
+			</el-form-item>
+    </el-form>
+	</el-dialog>
   </div>
 </template>
 
@@ -42,7 +56,11 @@ export default{
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
-        } else {
+        } 
+        else if(value.size<6||value.size>16){
+          callback(new Error('密码的长度必须在6-16位'));
+        }
+        else {
           if (this.ruleForm.checkPass !== '') {
             this.$refs.ruleForm.validateField('checkPass');
           }
@@ -74,7 +92,11 @@ export default{
           checkPass: [
             { validator: validatePass2, trigger: 'blur' }
           ]
-        }
+        },
+    forgetVisible:false,
+    forgetForm:{
+      emailAddress:'',
+    },
     }
   },
   methods: {
@@ -141,6 +163,24 @@ export default{
 		})
 
 	},
+  forget(){
+    this.axios.get('/api/user/getUserPasswordByName',{
+       params: {
+         emailAddress:this.forgetForm.emailAddress,
+         name:this.userName
+        }
+    })
+    .then((response)=>{
+      if(response.data.message=='成功'){
+        this.forgetVisible=false;
+        this.$alert('请查看邮箱邮件!');
+      }
+      else{
+        cosole.log(response)
+        this.$alert(response.data.message)
+      }
+    })
+  },
   }
 }
 </script>
