@@ -22,6 +22,9 @@
 			<el-form-item label="User name">
 			  <el-input v-model="registerUserName"></el-input>
 			</el-form-item>
+      <el-form-item label="emailAddress">
+			  <el-input v-model="forgetForm.emailAddress" ></el-input>
+			</el-form-item>
 			<el-form-item label="密码" prop="pass">
 			  <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
 			</el-form-item>
@@ -35,9 +38,6 @@
 	</el-dialog>
   <el-dialog title="Matrix Forget" :visible.sync="forgetVisible" width="30%" :modal-append-to-body="false" >
     <el-form :model="forgetForm"  ref="forgetForm" label-width="100px" class="demo-forgetForm">
-			<el-form-item label="emailAddress">
-			  <el-input v-model="forgetForm.emailAddress" ></el-input>
-			</el-form-item>
 			<el-form-item label="name">
 			  <el-input v-model="userName"></el-input>
 			</el-form-item>
@@ -151,6 +151,7 @@ export default{
 		this.axios.post('/api/user/register',{
 			name: this.registerUserName,
 			password: this.ruleForm.pass,
+      mail:this.forgetForm.emailAddress,
 		},{ emulateJSON:true })
 		.then((response) =>{
 			if(response.data.message == '成功'){
@@ -166,8 +167,7 @@ export default{
   forget(){
     this.axios.get('/api/user/getUserPasswordByName',{
        params: {
-         emailAddress:this.forgetForm.emailAddress,
-         name:this.userName
+         name:  this.userName
         }
     })
     .then((response)=>{
