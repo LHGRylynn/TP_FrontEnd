@@ -4,24 +4,24 @@
       + New
     </el-button>
     <el-card class="task_card">
-      <el-table :data="taskList" style="width: 100%" max-height="560px" @row-click="change">
+      <el-table :data="taskList" style="width: 100% ; height: 1080px" @row-click="change">
         <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column prop="ID" label="任务编号" width="180" align="center"></el-table-column>
+        <el-table-column prop="state" label="状态" width="180" align="center"></el-table-column>
+        <el-table-column prop="title" label="标题" width="180" align="center"></el-table-column>
+        <el-table-column prop="username" label="负责人" width="180" align="center"></el-table-column>
         <el-table-column
           prop="priority"
           label="优先级"
           align="center"
           width="150"
-          :filters="[{ text: '最高', value: '最高' }, { text: '较高', value: '较高' }, { text: '一般', value: '一般' }, { text: '较低', value: '较低' }, { text: '最低', value: '最低' }]"
+          :filters="[{ text: '最高', value: '最高' }, { text: '较高', value: '较高' }, { text: '普通', value: '普通' }, { text: '较低', value: '较低' }, { text: '最低', value: '最低' }]"
           :filter-method="filterTag"
-          filter-placement="bottom-end"
-        >
+          filter-placement="bottom-end">
           <template slot-scope="scope">
             <el-tag :type="pri(scope.row.priority)" disable-transitions>{{scope.row.priority}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="标题" width="180" align="center"></el-table-column>
-        <el-table-column prop="state" label="状态" width="180" align="center"></el-table-column>
-        <el-table-column prop="username" label="负责人" width="180" align="center"></el-table-column>
         <el-table-column prop="sprintTitle" label="所属迭代" width="150" align="center"></el-table-column>
         <el-table-column
           prop="endDate"
@@ -105,7 +105,7 @@
           <el-input type="textarea" v-model="ruleForm.description"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')" style="margin-left:500px">Confirm</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">立即更改</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -146,7 +146,8 @@
         </el-form-item>
       </el-form>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="createtask">Confirm</el-button>
+          <el-button @click="tocreate = false">取 消</el-button>
+          <el-button type="primary" @click="createtask">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -250,7 +251,7 @@ export default{
       switch(pri){
         case "最高":return "danger";
         case "较高":return "warning";
-        case "一般":return "success";
+        case "普通":return "success";
         case "较低":return "primary";
         case "最低":return "info";
       }
@@ -271,11 +272,12 @@ export default{
     },
 
     filterTag(value, row) {
-      return row.priority === value;
+      return row.tag === value;
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          alert("submit!");
           console.log(this.ruleForm.reqtID);
           //console.log(this.pID,this.userID,this.ruleForm.ID,this.ruleForm.title,this.ruleForm.state,this.ruleForm.priority,this.ruleForm.startDate,this.ruleForm.endDate,this.ruleForm.description);
           this.updateTaskInfo(this.pID,this.userID,this.ruleForm.ID,this.ruleForm.title,this.ruleForm.state,this.ruleForm.priority,this.ruleForm.startDate,this.ruleForm.endDate,this.ruleForm.description,this.ruleForm.sprintID,this.ruleForm.reqtID);
@@ -308,7 +310,7 @@ export default{
         .then((response) => {
           console.log(response);
           if (response.data.code == 20000) {
-            this.$alert("Update Successfully!");
+            this.$alert("修改成功！");
             this.isForm=false;
           }
         })
@@ -325,7 +327,7 @@ export default{
         })
         .then((response) => {
           if (response.data.code == 20000) {
-            this.$alert("Create Successfully!");
+            this.$alert("创建成功！新建任务id为"+response.data.data.ID);
             this.tocreate=false;
           }
         })

@@ -7,7 +7,7 @@
     <div class="card-content">
       <el-card shadow="never">
         <div slot="header">Avatar</div>
-        <img :src="MyInfo.avatar" height="150px" width="200px">
+        <img :src="MyInfo.avatar" height="150px" width="200px" />
       </el-card>
       <el-card shadow="never" class="myInfo__card">
         <div slot="header">Information</div>
@@ -17,7 +17,12 @@
         <p>{{MyInfo.name}}</p>
       </el-card>
     </div>
-    <el-dialog class="my-info__edit-dialog" title="Editting My Information " :visible.sync="isMyInfoEditting" :modal="false">
+    <el-dialog
+      class="my-info__edit-dialog"
+      title="Editting My Information "
+      :visible.sync="isMyInfoEditting"
+      :modal="false"
+    >
       <h1>Name</h1>
       <el-input v-model="newMyInfo.name"></el-input>
       <h1>Password</h1>
@@ -25,14 +30,16 @@
       <h1>Avatar</h1>
       <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        action
+        :show-file-list="false"
+        :on-change="onUploadChange"
+        list-type="picture-card"
+      >
+        <img v-if="imageUrl" height="145px" width="145px" :src="imageUrl" />
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="isMyInfoEditting = false">取消</el-button>
-        <el-button type="primary" @click="confirmEdit">确定</el-button>
+        <el-button type="primary" @click="confirmEdit">Confirm</el-button>
       </div>
     </el-dialog>
   </el-card>
@@ -40,59 +47,100 @@
 
 <script>
 export default {
-  title: 'MyInfo',
-  data () {
+  title: "MyInfo",
+  data() {
     return {
       isMyInfoEditting: false,
-      imageUrl: '',
+      imageUrl: "",
+      pam:"",
       MyInfo: {
         ID: this._GLOBAL.userObj.ID,
         name: this._GLOBAL.userObj.name,
-        avatar: this._GLOBAL.imgBaseUrl + this._GLOBAL.userObj.avatar
+        avatar: this._GLOBAL.imgBaseUrl + this._GLOBAL.userObj.avatar,
       },
-      newMyInfo:{
+      newMyInfo: {
         ID: this._GLOBAL.userObj.ID,
         name: this._GLOBAL.userObj.name,
         avatar: this._GLOBAL.imgBaseUrl + this._GLOBAL.userObj.avatar,
-        password: ''
-      }
-    }
+        password: "",
+      },
+    };
   },
   methods: {
-    editMyInfo () {
-      this.isMyInfoEditting = true
+    onUploadChange(file) {
+      const isIMAGE =
+        file.raw.type === "image/jpeg" ||
+        file.raw.type === "image/png" ||
+        file.raw.type === "image/gif";
+      const isLt1M = file.size / 1024 / 1024 < 2;
+
+      if (!isIMAGE) {
+        this.$message.error("上传文件只能是图片格式!");
+        return false;
+      }
+      if (!isLt1M) {
+        this.$message.error("上传文件大小不能超过 2MB!");
+        return false;
+      }
+
+      this.imageUrl = file.url;
+
+      var reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onload = function (e) {
+        hash = asmCrypto.SHA256.hex(this.result);
+      };
+
+      // console.log(reader.readAsArrayBuffer(file));
+
+      // this.axios
+      //   .post("/api/user/updateAvatarByID?ID="+this.MyInfo.ID+"&avatar="+this.imageUrl, {
+      //     emulateJSON: true,
+      //   })
+      //   .then((response) => {
+      //     if (response.data.message == "成功") {
+      //       console.log("成功");
+      //     }
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
     },
-    confirmEdit () {
-      this.isMyInfoEditting = false
-    }
-  }
-}
+    editMyInfo() {
+      this.isMyInfoEditting = true;
+      this.imageUrl = "";
+    },
+    confirmEdit() {
+      this.isMyInfoEditting = false;
+    },
+  },
+};
 </script>
 
 <style scoped>
-.my-info__card{
+.my-info__card {
   margin: 24px;
   height: max-content;
 }
-.card-content{
+.card-content {
   display: flex;
 }
-.myInfo__card h1{
+.myInfo__card h1 {
   font-size: 18px;
 }
-.myInfo__card p{
+.myInfo__card p {
   padding: 12px 0px;
 }
-.card-content>*{
+.card-content > * {
   flex-grow: 1;
   flex-shrink: 1;
   margin: 0px 12px;
 }
-.my-info__edit-dialog h1{
+.my-info__edit-dialog h1 {
   font-size: 18px;
   padding: 12px 0px;
 }
-.header-button{
+.header-button {
   float: right;
   margin-top: -8px;
   margin-right: 12px;
@@ -106,7 +154,7 @@ export default {
   overflow: hidden;
 }
 .avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
+  border-color: #409eff;
 }
 .avatar-uploader-icon {
   font-size: 28px;

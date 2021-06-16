@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <el-tabs v-model="tab" type="card">
-      <el-tab-pane label="Basic" name="basic">
+  <div style="background-color:#F2F6FC">
+    <el-tabs v-model="tab" type="border-card">
+      <el-tab-pane label="Basic" name="basic" style="border-color:red">
         <project-basic :projectID="projectID"/>
       </el-tab-pane>
       <el-tab-pane label="Sprint" name="sprint">

@@ -92,6 +92,9 @@ export default {
 </script>
 
 <style scoped>
+.el-card >>> .el-card__header  {
+  background-color: #bddbff38;
+}
 .card-content{
   display: flex;
 }

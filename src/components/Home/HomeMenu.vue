@@ -1,12 +1,14 @@
 <template>
 	<aside class="aside">
-		<div class="user-info">
+		<div class="user-info" style="background-color:#DCDFE6">
 			<div>
 				<el-avatar :src="avatarURL"></el-avatar>
 				<p class="user-info__name">{{userName}}</p>
 			</div>
 		</div>
-		<el-menu ref="home-menu" class="menu" default-active="my-jobs" :default-openeds="['myJob', 'myProjects']">
+		<el-menu  background-color="#606266"
+      text-color="#fff"
+      active-text-color="#ffd04b" ref="home-menu" class="menu" default-active="my-jobs" :default-openeds="['myJob', 'myProjects']">
 			<el-menu-item index="my-info" @click="toMyInfo('my-info')">
 				<span>MY INFO</span>
 			</el-menu-item>
