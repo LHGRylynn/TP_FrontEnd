@@ -27,7 +27,8 @@ Vue.prototype._GLOBAL = {
   userObj: {
     ID: 0,
     name: '',
-    avatar: ''
+    avatar: '',
+    mail:'',
   },
   ProjectList:[],
   projectIndex: 0

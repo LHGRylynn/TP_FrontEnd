@@ -15,6 +15,8 @@
         <p>{{MyInfo.ID}}</p>
         <h1>Name</h1>
         <p>{{MyInfo.name}}</p>
+        <h1>Email</h1>
+        <p>{{MyInfo.mail}}</p>
       </el-card>
     </div>
     <el-dialog
@@ -27,12 +29,15 @@
       <el-input v-model="newMyInfo.name"></el-input>
       <h1>Password</h1>
       <el-input v-model="newMyInfo.password" type="password"></el-input>
+      <h1>Email</h1>
+      <el-input v-model="newMyInfo.mail"></el-input>
       <h1>Avatar</h1>
       <el-upload
         class="avatar-uploader"
-        action
+        action="#"
+        :http-request="httpRequest"
         :show-file-list="false"
-        :on-change="onUploadChange"
+        :before-upload="beforeAvatarUpload"
         list-type="picture-card"
       >
         <img v-if="imageUrl" height="145px" width="145px" :src="imageUrl" />
@@ -52,72 +57,150 @@ export default {
     return {
       isMyInfoEditting: false,
       imageUrl: "",
-      pam:"",
       MyInfo: {
         ID: this._GLOBAL.userObj.ID,
-        name: this._GLOBAL.userObj.name,
-        avatar: this._GLOBAL.imgBaseUrl + this._GLOBAL.userObj.avatar,
+        // name: this._GLOBAL.userObj.name,
+        // avatar: this._GLOBAL.imgBaseUrl + this._GLOBAL.userObj.avatar,
+        // mail: this._GLOBAL.userObj.mail,
+        name:"",
+        avatar:"",
+        mail:""
       },
       newMyInfo: {
         ID: this._GLOBAL.userObj.ID,
         name: this._GLOBAL.userObj.name,
         avatar: this._GLOBAL.imgBaseUrl + this._GLOBAL.userObj.avatar,
+        mail: this._GLOBAL.userObj.mail,
         password: "",
       },
     };
   },
+  created:function(){
+    this.getAvatar();
+    this.getInfo();
+  },
   methods: {
-    onUploadChange(file) {
-      const isIMAGE =
-        file.raw.type === "image/jpeg" ||
-        file.raw.type === "image/png" ||
-        file.raw.type === "image/gif";
-      const isLt1M = file.size / 1024 / 1024 < 2;
+    getInfo() {
+      this.axios
+        .get("/api/user/getUserByID?ID=" + this.MyInfo.ID, {
+          emulateJSON: true,
+        })
+        .then((response) => {
+          if (response.data.message == "成功") {
+            this.MyInfo.name=response.data.data.user.name;
+            this.MyInfo.mail=response.data.data.user.mail;
+            this.newMyInfo.mail=response.data.data.user.mail;
+            this.newMyInfo.name=response.data.data.user.name;
+            this.newMyInfo.password=response.data.data.user.password;
 
-      if (!isIMAGE) {
-        this.$message.error("上传文件只能是图片格式!");
-        return false;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    getAvatar() {
+      this.axios
+        .get("/api/user/getAvatarByID?ID=" + this.MyInfo.ID, {
+          emulateJSON: true,
+        })
+        .then((response) => {
+          if (response.data.message == "成功") {
+            this._GLOBAL.avatar = response.data.data.avatar;
+            this.MyInfo.avatar =
+              this._GLOBAL.imgBaseUrl + response.data.data.avatar;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
       }
-      if (!isLt1M) {
-        this.$message.error("上传文件大小不能超过 2MB!");
-        return false;
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-
-      this.imageUrl = file.url;
-
-      var reader = new FileReader();
-      reader.readAsDataURL(file.raw);
-      reader.onload = function (e) {
-        hash = asmCrypto.SHA256.hex(this.result);
+      return isJPG && isLt2M;
+    },
+    httpRequest(data) {
+      let _this = this;
+      let rd = new FileReader(); // 创建文件读取对象
+      let file = data.file;
+      rd.readAsDataURL(file); // 文件读取装换为base64类型
+      rd.onloadend = function (e) {
+        console.log("测试：" + this.result);
+        _this.imageUrl = this.result; // this指向当前方法onloadend的作用域
       };
-
-      // console.log(reader.readAsArrayBuffer(file));
-
-      // this.axios
-      //   .post("/api/user/updateAvatarByID?ID="+this.MyInfo.ID+"&avatar="+this.imageUrl, {
-      //     emulateJSON: true,
-      //   })
-      //   .then((response) => {
-      //     if (response.data.message == "成功") {
-      //       console.log("成功");
-      //     }
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
     },
     editMyInfo() {
       this.isMyInfoEditting = true;
       this.imageUrl = "";
     },
+    updateInfo(){
+      this.axios
+        .post(
+          "/api/user/updateUserByID",
+          {
+            ID: this.MyInfo.ID,
+            name:this.newMyInfo.name,
+            password:this.newMyInfo.password,
+            mail:this.newMyInfo.mail
+          },
+          {
+            emulateJSON: true,
+          }
+        )
+        .then((response) => {
+          if (response.data.message == "成功") {
+            this.MyInfo.name=this.newMyInfo.name;
+            this.MyInfo.mail=this.newMyInfo.mail;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    updateAvatar() {
+      this.axios
+        .post(
+          "/api/user/updateAvatarByID",
+          {
+            ID: this.MyInfo.ID,
+            file: this.imageUrl,
+          },
+          {
+            emulateJSON: true,
+          }
+        )
+        .then((response) => {
+          if (response.data.message == "成功") {
+            console.log("成功")
+            this.getAvatar();
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     confirmEdit() {
       this.isMyInfoEditting = false;
+      this.updateInfo();
+      if (this.imageUrl.length != 0) {
+        this.updateAvatar();
+      }
     },
   },
 };
 </script>
 
 <style scoped>
+.el-card >>> .el-card__header {
+  background-color: #bddbff38;
+}
 .my-info__card {
   margin: 24px;
   height: max-content;

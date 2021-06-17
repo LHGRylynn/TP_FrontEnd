@@ -68,6 +68,7 @@
 				projectsList: this._GLOBAL.ProjectList
 			}
 		},
+		
 		mounted() {
 			this.$router.replace('/' + this.userName + '/my-jobs')
 		},

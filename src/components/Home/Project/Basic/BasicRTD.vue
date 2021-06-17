@@ -99,12 +99,15 @@ export default {
     // 若 projectID 变更，更新页面
     rCnt(to, from) {
       this.myEcharts();
+      this.calculate();
     },
     dCnt(to, from) {
       this.myEcharts();
+      this.calculate();
     },
     count(to, from) {
       this.myEcharts();
+      this.calculate();
     },
   },
   methods: {
@@ -128,7 +131,7 @@ export default {
               else if (task.state == "未开始") this.nostarting++;
               else this.processing++;
             }
-            this.percentage = this.count / this.already;
+            this.percentage = (this.already / this.count*100).toFixed(2);
           }
         })
         .catch(function (error) {
@@ -187,7 +190,6 @@ export default {
           },
         ],
       };
-
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
@@ -202,7 +204,6 @@ export default {
 .card-content {
   display: flex;
 }
-
 .card-content > * {
   flex-grow: 1;
   flex-shrink: 1;

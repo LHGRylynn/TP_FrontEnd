@@ -359,7 +359,7 @@ export default {
                 endDate: this.createForm.endDate,
                 projectID: this.pID,
                 sprintID: this.createForm.sprintID,
-                userID:this.ruleForm.userID
+                userID:this.createForm.userID
               },
               {
                 emulateJSON: true,

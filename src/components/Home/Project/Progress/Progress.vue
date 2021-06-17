@@ -241,6 +241,7 @@ export default{
   methods: {
     create(){
       this.tocreate=true;
+      this.createForm.projectID=this.pID;
     },
     change(row) {
       this.isForm = true;
@@ -327,6 +328,7 @@ export default{
           if (response.data.code == 20000) {
             this.$alert("Create Successfully!");
             this.tocreate=false;
+            this.show();
           }
         })
         .catch(function (error) {

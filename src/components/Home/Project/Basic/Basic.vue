@@ -73,6 +73,10 @@ export default {
     };
   },
   watch: {
+    // 若路由路径变化，从全局变量刷新 projectID
+    $route () {
+      this.projectID = this._GLOBAL.projectIndex;
+    },
     // 若 projectID 变更，更新页面
     projectID(to, from) {
       this.basic.name = this._GLOBAL.ProjectList[
@@ -168,7 +172,7 @@ export default {
               else if (task.state == "未开始") this.rtd.nostarting++;
               else this.rtd.processing++;
             }
-            this.rtd.percentage = this.rtd.count / this.rtd.already;
+            this.rtd.percentage = this.rtd.count / this.rtd.already*100;
           }
         })
         .catch(function (error) {
