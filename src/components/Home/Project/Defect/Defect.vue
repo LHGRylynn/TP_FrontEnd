@@ -9,7 +9,7 @@
           label="优先级"
           align="center"
           width="150"
-          :filters="[{ text: '最高', value: '最高' }, { text: '较高', value: '较高' }, { text: '普通', value: '普通' }, { text: '较低', value: '较低' }, { text: '最低', value: '最低' }]"
+          :filters="[{ text: '最高', value: '最高' }, { text: '较高', value: '较高' }, { text: '一般', value: '一般' }, { text: '较低', value: '较低' }, { text: '最低', value: '最低' }]"
           :filter-method="filterTag"
           filter-placement="bottom-end"
         >
@@ -105,7 +105,7 @@
           <el-input type="textarea" v-model="ruleForm.description"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')" style="margin-left:500px">立即更改</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')" style="margin-left:500px">Confirm</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -180,7 +180,7 @@
           <el-input type="textarea" v-model="createForm.description"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="createDefect('createForm')" style="margin-left:500px">立即创建</el-button>
+          <el-button type="primary" @click="createDefect('createForm')" style="margin-left:500px">Confirm</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -309,7 +309,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.$alert("Update Successfully!");
           this.axios
             .post(
               "/api/defect/updateDefByID",
@@ -346,7 +346,7 @@ export default {
     createDefect(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.$alert("Create Successfully!");
           this.axios
             .post(
               "/api/defect/createDefect",
@@ -359,7 +359,7 @@ export default {
                 endDate: this.createForm.endDate,
                 projectID: this.pID,
                 sprintID: this.createForm.sprintID,
-                userID:this.ruleForm.userID
+                userID:this.createForm.userID
               },
               {
                 emulateJSON: true,

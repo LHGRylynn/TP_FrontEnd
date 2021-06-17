@@ -1,39 +1,52 @@
 <template>
   <div>
     <el-row :gutter="20" style="margin-left:16px;margin-top:20px">
-			<el-col :span="12">
-				<el-card>
-					<div slot="header">Task</div>
-					<el-row :gutter="20">
-						<el-col :span="12">
-							<el-progress type="dashboard" :percentage=20 :color="colors" style="position: relative; left: 25%;"></el-progress>
-						</el-col>
-						<el-col :span="10" :offset="1">
-							<p>All: 10</p><br />
-							<p>Pending: 5</p><br />
-							<p>In progress: 3</p><br />
-							<p>Completed: 2</p><br />
-						</el-col>
-					</el-row>
-				</el-card>
-			</el-col>
-			<el-col :span="12">
-				<el-card>
-					<div slot="header">Defect Distribution</div>
-					<el-col :span="12" :offset="2">
-					<div id="defect_chart" style="width: 200px; height:168px; align-content: center;"></div>
-					</el-col>
-					<el-col :span="8" :offset="1">
-						<p>打开: 1</p><br />
-						<p>已确认: 2</p><br />
-						<p>修复中: 3</p><br />
-						<p>已解决: 3</p><br />
-					</el-col>
-				</el-card>
-			</el-col>
-		</el-row>
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">Task</div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-progress
+                type="dashboard"
+                :percentage="percentage"
+                :color="colors"
+                style="position: relative; left: 25%;"
+              ></el-progress>
+            </el-col>
+            <el-col :span="10" :offset="1">
+              <p>All: {{count}}</p>
+              <br />
+              <p>Pending: {{nostarting}}</p>
+              <br />
+              <p>In progress: {{processing}}</p>
+              <br />
+              <p>Completed: {{already}}</p>
+              <br />
+            </el-col>
+          </el-row>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
+          <div slot="header">Defect Distribution</div>
+          <el-col :span="12" :offset="2">
+            <div id="defect_chart" style="width: 200px; height:168px; align-content: center;"></div>
+          </el-col>
+          <el-col :span="8" :offset="1">
+            <p>打开: {{open}}</p>
+            <br />
+            <p>已确认: {{confirmed}}</p>
+            <br />
+            <p>修复中: {{restoring}}</p>
+            <br />
+            <p>已解决: {{solved}}</p>
+            <br />
+          </el-col>
+        </el-card>
+      </el-col>
+    </el-row>
 
-    <list-card class="my-jobs__card" title="My Tasks" :data="tasks" :fields="tasksFields"/>
+    <list-card class="my-jobs__card" title="My Tasks" :data="tasks" :fields="tasksFields" />
     <list-card class="my-jobs__card" title="My Defects" :data="defects" :fields="defectsFields" />
   </div>
 </template>
@@ -45,17 +58,24 @@ export default {
   components: {
     "list-card": ListCard,
   },
-  props: [
-			'count',
-			'already',
-			'processing',
-			'nostarting',
-			'percentage',
-			'rCnt',
-			'dCnt'
-		],
+  // props: [
+  // 		'count',
+  // 		'already',
+  // 		'processing',
+  // 		'nostarting',
+  // 		'percentage',
+  // 	],
   data() {
     return {
+      count: 0,
+      already: 0,
+      processing: 0,
+      nostarting: 0,
+      percentage: 0,
+      open: 0,
+      confirmed: 0,
+      restoring: 0,
+      solved: 0,
       requiresFields: [
         "title",
         "type",
@@ -130,34 +150,11 @@ export default {
     this.myEcharts();
   },
   created() {
+    this.getData();
     this.myEcharts();
-	this.calculate();
+    // this.calculate();
   },
   methods: {
-    calculate() {
-      this.axios
-        .get("/api/task/getTaskListByUid?userid=" + userID)
-        .then((response) => {
-          if (response.data.message == "成功") {
-            var taskList = response.data.data.task;
-            console.log(taskList);
-            this.count = 0;
-            this.already = 0;
-            this.processing = 0;
-            this.nostarting = 0;
-            for (let task of taskList) {
-              this.count++;
-              if (task.state == "已完成") this.already++;
-              else if (task.state == "未开始") this.nostarting++;
-              else this.processing++;
-            }
-            this.percentage = this.count / this.already;
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
     getData() {
       // 'headers': {'Access-Control-Allow-Origin': '*','access-control-allow-credentials': 'true'}
       // this.axios.setRequestHeader()
@@ -167,12 +164,35 @@ export default {
       this.axios.get(url).then((response) => {
         if (response.data.message == "成功") {
           this.tasks = response.data.data.task;
+          this.count = 0;
+          this.already = 0;
+          this.processing = 0;
+          this.nostarting = 0;
+          for (let task of this.tasks) {
+            this.count++;
+            if (task.state == "已完成") this.already++;
+            else if (task.state == "未开始") this.nostarting++;
+            else this.processing++;
+          }
+          this.percentage = (this.already / this.count*100).toFixed(2);
         }
       });
-      url = this._GLOBAL.baseUrl + "/defect/getDefListByUID?ID=1"; // + userID
+      url = this._GLOBAL.baseUrl + "/defect/getDefListByUID?ID=" + userID;
       this.axios.post(url).then((response) => {
         if (response.data.message == "成功") {
           this.defects = response.data.data.defectList;
+          this.open = 0;
+          this.confirmed = 0;
+          this.restoring = 0;
+          this.solved = 0;
+          for (let defect of this.defects) {
+            if (defect.state == "已确认") {
+              this.confirmed++;
+            } else if (defect.state == "打开") this.open++;
+            else if (defect.state == "修复中") this.restoring++;
+            else if (defect.state == "已解决") this.solved++;
+          }
+          this.myEcharts();
         }
       });
     },
@@ -215,25 +235,25 @@ export default {
             data: [
               // 数据数组，name 为数据项名称，value 为数据项值
               {
-                value: 1,
+                value: this.open,
                 name: "打开",
               },
               {
-                value: 2,
+                value: this.confirmed,
                 name: "已确认",
               },
               {
-                value: 3,
+                value: this.restoring,
                 name: "修复中",
               },
               {
-                value: 3,
+                value: this.solved,
                 name: "已解决",
               },
-            //   {
-            //     value: 3,
-            //     name: "关闭",
-            //   },
+              //   {
+              //     value: 3,
+              //     name: "关闭",
+              //   },
             ],
           },
         ],

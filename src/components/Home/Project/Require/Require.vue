@@ -97,7 +97,7 @@
           <el-input type="textarea" v-model="ruleForm.description"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')" style="margin-left:500px">立即更改</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')" style="margin-left:500px">Confirm</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -160,7 +160,7 @@
           <el-input type="textarea" v-model="createForm.description"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="createReqt('createForm')" style="margin-left:500px">立即创建</el-button>
+          <el-button type="primary" @click="createReqt('createForm')" style="margin-left:500px">Confirm</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -336,7 +336,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.$alert("Update Successfully!");
           this.axios
             .post(
               "/api/requirement/updateReqtByID",
@@ -372,7 +372,7 @@ export default {
     createReqt(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.$alert("Create Successfully!");
           this.axios
             .post(
               "/api/requirement/createReqt",

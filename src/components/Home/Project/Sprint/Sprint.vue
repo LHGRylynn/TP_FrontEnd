@@ -4,11 +4,10 @@
       <el-select v-model="sprintIndex">
         <el-option
           v-for="(item, index) in sprintsList"
-          :key="index"
-          :label="index + 1 + ' : ' + item.title"
-          :value="index"
-        >
-        </el-option>
+          :key="sprintsList.length-index-1"
+          :label="index+1 + ' : ' + item.title"
+          :value="sprintsList.length-index-1"
+        ></el-option>
       </el-select>
       <el-button @click="isNewSprint = true">
         <span>+ New</span>
@@ -42,7 +41,6 @@
       :data="requires"
       :fields="requiresFields"
     />
-
     <list-card
       class="sprint__card"
       title="Tasks"
@@ -414,8 +412,9 @@ export default {
       var url = this._GLOBAL.baseUrl + "/sprint/createSprint";
       var config = { emulateJSON: true };
       var postData = this.newSprint;
-      postData.projectID =
-        this._GLOBAL.ProjectList[this._GLOBAL.projectIndex].ID;
+      postData.projectID = this._GLOBAL.ProjectList[
+        this._GLOBAL.projectIndex
+      ].ID;
       this.axios.post(url, postData, config).then((response) => {
         if (response.data.message == "成功") {
           this.isNewSprint = false;

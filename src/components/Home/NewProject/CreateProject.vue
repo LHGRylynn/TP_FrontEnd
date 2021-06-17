@@ -2,7 +2,7 @@
 	<div>
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 			<el-form-item label="Name" prop="name">
-				<el-input v-model="ruleForm.name"></el-input>
+				<el-input v-model="ruleForm.name" style="width:400px"></el-input>
 			</el-form-item>
 			<el-form-item label="Period" prop="datavalue">
 				<el-date-picker v-model="ruleForm.datavalue" type="daterange" value-format="yyyy-MM-dd" range-separator="To" start-placeholder="Start" end-placeholder="End">
@@ -19,7 +19,7 @@
 				</el-col>
 			</el-form-item> -->
 			<el-form-item label="Description" prop="desc">
-				<el-input type="textarea" v-model="ruleForm.desc" placeholder="No longer than 100 characters"></el-input>
+				<el-input type="textarea" v-model="ruleForm.desc" placeholder="No longer than 100 characters" style="width:800px"></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="submitForm('ruleForm')">Create project</el-button>

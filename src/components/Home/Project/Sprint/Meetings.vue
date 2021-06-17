@@ -73,6 +73,9 @@ export default {
 </script>
 
 <style scoped>
+.el-card >>> .el-card__header  {
+  background-color: #bddbff38;
+}
 .sprint__meeting-dialog h1{
   font-size: 18px;
   padding: 12px 0px;
