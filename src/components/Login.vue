@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div style="position:absolute;top:96px;font:'微软雅黑';font-size:30px;color:white"><span>Matrix 项目协作管理平台</span></div>
+    <div style="position:absolute;top:86px;font:'微软雅黑';font-size:30px;color:white;"><span>TreeTop 项目协作管理平台</span></div>
     <el-card class="login__card">
       <div slot="header">Login</div>
       <el-form>
@@ -13,7 +13,7 @@
       <el-button type="text" class="forget" @click="forgetVisible = true">忘记密码?找回密码</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="login">Login</el-button>
+          <el-button style="margin-left:180px" type="primary" v-on:click="login">Login</el-button>
         </el-form-item>
       </el-form>
     </el-card>

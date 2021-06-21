@@ -2,7 +2,8 @@
 	<aside class="aside">
 		<div class="user-info" style="background-color:#DCDFE6">
 			<div>
-				<el-avatar :src="avatarURL"></el-avatar>
+				<!-- <el-avatar :src="avatarURL"></el-avatar> -->
+				<img width="50px" src="../../assets/treetop.png"/>
 				<p class="user-info__name">{{userName}}</p>
 			</div>
 		</div>

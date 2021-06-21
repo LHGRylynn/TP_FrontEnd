@@ -4,9 +4,9 @@
       <el-select v-model="sprintIndex">
         <el-option
           v-for="(item, index) in sprintsList"
-          :key="sprintsList.length-index-1"
+          :key="index"
           :label="index+1 + ' : ' + item.title"
-          :value="sprintsList.length-index-1"
+          :value="index"
         ></el-option>
       </el-select>
       <el-button @click="isNewSprint = true">
@@ -264,6 +264,7 @@ export default {
           if (response.data.message == "成功") {
             if (response.data.data.spList.length > 0) {
               this.sprintsList = response.data.data.spList;
+              this.sprintIndex=this.sprintsList.length-1;
               this.getRequires();
               this.getTasks();
               this.getDefects();

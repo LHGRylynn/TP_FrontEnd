@@ -7,7 +7,8 @@
     <div class="card-content">
       <el-card shadow="never">
         <div slot="header">Avatar</div>
-        <img :src="MyInfo.avatar" height="150px" width="200px" />
+        <!-- <img :src="MyInfo.avatar" height="150px" width="200px" /> -->
+        <img src="../../../assets/treetop.png" height="200px" width="200px" />
       </el-card>
       <el-card shadow="never" class="myInfo__card">
         <div slot="header">Information</div>

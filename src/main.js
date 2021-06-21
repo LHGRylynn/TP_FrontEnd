@@ -23,12 +23,12 @@ Vue.use(ElementUI)
 Vue.prototype._GLOBAL = {
     userID: 1,
     projectID: 1,
-    imgBaseUrl: 'http://47.107.55.154:8080/imgs/',
+    imgBaseUrl: 'http://localhost:8080/imgs/',
     baseUrl: '/api', // 'http://39.97.175.119:8801'
     userObj: {
         ID: 0,
         name: '',
-        avatar: '',
+        avatar: './assets/logo.png',
         mail: '',
     },
     ProjectList: [],
