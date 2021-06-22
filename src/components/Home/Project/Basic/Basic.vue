@@ -145,9 +145,9 @@ export default {
               this.sprint.state = list[list.length - 1].state;
               this.sprint.time = list[list.length - 1].endDate;
             } else {
-              this.sprint.name = "NaN";
-              this.sprint.state = "NaN";
-              this.sprint.time = "NaN";
+              this.sprint.name = "无";
+              this.sprint.state = "无";
+              this.sprint.time = "无";
             }
             // console.log(this.isHost);
           }
@@ -172,7 +172,7 @@ export default {
               else if (task.state == "未开始") this.rtd.nostarting++;
               else this.rtd.processing++;
             }
-            this.rtd.percentage = this.rtd.count / this.rtd.already*100;
+            this.rtd.percentage = this.rtd.count==0?0.00: (this.rtd.already/ this.rtd.count*100).toFixed(2);
           }
         })
         .catch(function (error) {

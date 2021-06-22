@@ -113,6 +113,7 @@ export default{
     },
     login () {
       // 登录，获取用户信息，后获取所有项目
+      let that=this;
       this.axios.get('/api/user/login', {
         params: {
           name: this.userName,
@@ -121,24 +122,28 @@ export default{
       })
       .then((response) => {
         if(response.data.message == '成功'){
-          this._GLOBAL.userID = response.data.data.user.ID
-          this._GLOBAL.userObj = response.data.data.user
+          console.log(response)
+          that._GLOBAL.userID = response.data.data.UserAndToken.user.ID
+          that._GLOBAL.userObj = response.data.data.UserAndToken.user
+          localStorage.setItem("ms_username",response.data.data.UserAndToken.user.ID);
+          localStorage.setItem('token',response.data.data.UserAndToken.token)
           // 获取所有项目
           this.axios.get('/api/project/getPrjListByUID', {
             params: {
-              UID: this._GLOBAL.userObj.ID
+              UID: that._GLOBAL.userObj.ID,
+              token: localStorage.getItem('token')
             }
           })
           .then((response) => {
             if(response.data.message == '成功'){
-              this._GLOBAL.ProjectList = response.data.data.prjList;
-              this._GLOBAL.projectIndex = 0
-              this.$router.push('/' + this._GLOBAL.userObj.name)
+              that._GLOBAL.ProjectList = response.data.data.prjList;
+              that._GLOBAL.projectIndex = 0
+              that.$router.push('/' + that._GLOBAL.userObj.name)
             }
           })
         }
         else{
-          this.$alert('The login failed, please re-enter your username and password', 'Login Failed', { confirmButtonText: 'OK' })
+          that.$alert('The login failed, please re-enter your username and password', 'Login Failed', { confirmButtonText: 'OK' })
         }
       })
       .catch(function (error) {

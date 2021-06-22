@@ -231,6 +231,7 @@ export default{
     projectID(to, from){
       this.pID = this._GLOBAL.ProjectList[to].ID
       this.show()
+      this.getSprintList();
     }
   },
   created() {
@@ -280,6 +281,7 @@ export default{
           console.log(this.ruleForm.reqtID);
           //console.log(this.pID,this.userID,this.ruleForm.ID,this.ruleForm.title,this.ruleForm.state,this.ruleForm.priority,this.ruleForm.startDate,this.ruleForm.endDate,this.ruleForm.description);
           this.updateTaskInfo(this.pID,this.userID,this.ruleForm.ID,this.ruleForm.title,this.ruleForm.state,this.ruleForm.priority,this.ruleForm.startDate,this.ruleForm.endDate,this.ruleForm.description,this.ruleForm.sprintID,this.ruleForm.reqtID);
+        
         } else {
           console.log("error submit!!");
           return false;
@@ -311,6 +313,7 @@ export default{
           if (response.data.code == 20000) {
             this.$alert("Update Successfully!");
             this.isForm=false;
+            this.show();
           }
         })
         .catch(function (error) {

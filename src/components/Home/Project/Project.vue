@@ -49,7 +49,7 @@ export default{
   data () {
     return {
       tab: 'basic',
-      projectID: this._GLOBAL.projectIndex,
+      projectID: this._GLOBAL.ProjectList[this._GLOBAL.projectIndex].ID,
 			list: [],
     }
   },
@@ -57,19 +57,22 @@ export default{
     // 若路由路径变化，从全局变量刷新 projectID
     $route () {
       this.projectID = this._GLOBAL.projectIndex;
+      
     },
 		
   },
 	methods: {
 		show() {
+      var that=this;
 			this.axios.get('/api/project/getMemberListByPID', {
 					params: {
 						ID: this._GLOBAL.ProjectList[this._GLOBAL.projectIndex].ID,
+            token: localStorage.getItem('token')
 					}
 				})
 				.then((response) => {
 					if (response.data.message == '成功') {
-						this.list = response.data.data.memberList;
+						that.list = response.data.data.memberList;
 					}
 				})
 			}
