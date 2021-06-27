@@ -101,7 +101,8 @@
 								// 获取所有项目
 								this.axios.get('/api/project/getPrjListByUID', {
 										params: {
-											UID: this._GLOBAL.userObj.ID
+											UID: this._GLOBAL.userObj.ID,
+											token: localStorage.getItem('token')
 										}
 									})
 									.then((response) => {

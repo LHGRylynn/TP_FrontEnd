@@ -66,7 +66,8 @@
 				this.axios.get('/api/project/addMember', {
 						params: {
 							PID: this._GLOBAL.ProjectList[this._GLOBAL.projectIndex].ID,
-							UID: this.userid
+							UID: this.userid,
+							token: localStorage.getItem('token')
 						}
 					})
 					.then((response) => {
@@ -81,7 +82,8 @@
 				this.axios.get('/api/project/deleteMember', {
 						params: {
 							PID: this._GLOBAL.ProjectList[this._GLOBAL.projectIndex].ID,
-							UID: this.userid
+							UID: this.userid,
+							token: localStorage.getItem('token')
 						}
 					})
 					.then((response) => {
@@ -95,6 +97,7 @@
 				this.axios.get('/api/project/getMemberListByPID', {
 						params: {
 							ID: this._GLOBAL.ProjectList[this._GLOBAL.projectIndex].ID,
+							token: localStorage.getItem('token')
 						}
 					})
 					.then((response) => {

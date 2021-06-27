@@ -7,9 +7,10 @@
 				<p class="user-info__name">{{userName}}</p>
 			</div>
 		</div>
+		<!-- , 'myProjects' -->
 		<el-menu  background-color="#606266"
       text-color="#fff"
-      active-text-color="#ffd04b" ref="home-menu" class="menu" default-active="my-jobs" :default-openeds="['myJob', 'myProjects']">
+      active-text-color="#ffd04b" ref="home-menu" class="menu" default-active="my-jobs" :default-openeds="['myJob']">
 			<el-menu-item index="my-info" @click="toMyInfo('my-info')">
 				<span>MY INFO</span>
 			</el-menu-item>
@@ -80,7 +81,7 @@
 			// 维护路径 this.$route.params.projectName
 			// 进入某项目页面
 			toProject(project) {
-        this._GLOBAL.projectIndex = this.$refs['home-menu']['activeIndex']
+        		this._GLOBAL.projectIndex = this.$refs['home-menu']['activeIndex']
 				this.$router.push('/' + this.userName + '/' + project.name)
 			},
 			// 进入某工作页面

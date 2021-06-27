@@ -150,6 +150,7 @@ export default {
           params: {
             ID: this._GLOBAL.ProjectList[this._GLOBAL.projectIndex].ID,
             UID: this._GLOBAL.userObj.ID,
+            token: localStorage.getItem('token')
           },
         })
         .then((response) => {

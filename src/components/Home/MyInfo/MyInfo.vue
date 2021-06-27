@@ -8,7 +8,8 @@
       <el-card shadow="never">
         <div slot="header">Avatar</div>
         <!-- <img :src="MyInfo.avatar" height="150px" width="200px" /> -->
-        <img src="../../../assets/treetop.png" height="200px" width="200px" />
+        <!-- ../../../assets/treetop.png -->
+        <img src="http://120.79.157.21/huajiaohuixiang/avatar5b0dfb08f4174c7a8e5b721ac84b4414.jpg" height="200px" width="200px" />
       </el-card>
       <el-card shadow="never" class="myInfo__card">
         <div slot="header">Information</div>

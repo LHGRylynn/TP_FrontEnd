@@ -194,7 +194,7 @@ export default {
   data() {
     return {
       currentID: 0,
-      pID: 1,
+      pID: this.projectID,
       isForm: false,
       isCreate: false,
       sprintList: [],
@@ -240,6 +240,8 @@ export default {
     projectID(to, from){
       this.pID = this._GLOBAL.ProjectList[to].ID
       this.show()
+      this.getSprintList()
+      this.getUserList()
     }
   },
   methods: {

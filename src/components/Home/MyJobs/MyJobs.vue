@@ -30,16 +30,16 @@
         <el-card>
           <div slot="header">Defect Distribution</div>
           <el-col :span="12" :offset="2">
-            <div id="defect_chart" style="width: 200px; height:168px; align-content: center;"></div>
+            <div id="defect_chart" style="width: 300px; height:168px; align-content: center;"></div>
           </el-col>
           <el-col :span="8" :offset="1">
-            <p>打开: {{open}}</p>
+            <p>opened: {{open}}</p>
             <br />
-            <p>已确认: {{confirmed}}</p>
+            <p>confirmed: {{confirmed}}</p>
             <br />
-            <p>修复中: {{restoring}}</p>
+            <p>restoring: {{restoring}}</p>
             <br />
-            <p>已解决: {{solved}}</p>
+            <p>solved: {{solved}}</p>
             <br />
           </el-col>
         </el-card>
@@ -174,7 +174,7 @@ export default {
             else if (task.state == "未开始") this.nostarting++;
             else this.processing++;
           }
-          this.percentage = (this.already / this.count*100).toFixed(2);
+          this.percentage = this.count*100==0?0.00:(this.already / this.count*100).toFixed(2);
         }
       });
       url = this._GLOBAL.baseUrl + "/defect/getDefListByUID?ID=" + userID;
@@ -236,19 +236,19 @@ export default {
               // 数据数组，name 为数据项名称，value 为数据项值
               {
                 value: this.open,
-                name: "打开",
+                name: "opened",
               },
               {
                 value: this.confirmed,
-                name: "已确认",
+                name: "confirmed",
               },
               {
                 value: this.restoring,
-                name: "修复中",
+                name: "restoring",
               },
               {
                 value: this.solved,
-                name: "已解决",
+                name: "solved",
               },
               //   {
               //     value: 3,

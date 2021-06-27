@@ -265,7 +265,12 @@ export default {
   watch: {
     projectID(to, from) {
       this.pID = this._GLOBAL.ProjectList[to].ID;
+
+      console.log(this.pID)
+      console.log(this._GLOBAL.ProjectList[to].ID);
+      console.log(this._GLOBAL.ProjectList[from].ID);
       this.show();
+      this.getSprintList();
     },
   },
   methods: {

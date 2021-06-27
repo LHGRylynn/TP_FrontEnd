@@ -36,9 +36,9 @@
       <h1>Description</h1>
       <el-input v-model="sprintInfo.description" type="textarea"></el-input>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="deleteSptint">删除迭代</el-button>
-        <el-button @click="isSprintEditting = false">取消</el-button>
-        <el-button type="primary" @click="confirmEdit">确定</el-button>
+        <el-button @click="deleteSptint">Delete Sprint</el-button>
+        <el-button @click="isSprintEditting = false">Cancel</el-button>
+        <el-button type="primary" @click="confirmEdit">Confirm</el-button>
       </div>
     </el-dialog>
   </el-card>

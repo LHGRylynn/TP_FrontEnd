@@ -76,8 +76,8 @@
       <h1>Attachment</h1>
       <p>{{ newMeeting.attachment }}</p>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="isAddMeeting = false">取消</el-button>
-        <el-button type="primary" @click="isAddMeeting = false">确定</el-button>
+        <el-button @click="isAddMeeting = false">Cancel</el-button>
+        <el-button type="primary" @click="isAddMeeting = false">Confirm</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -95,8 +95,8 @@
       <h1>Description</h1>
       <el-input v-model="newSprint.description" type="textarea"></el-input>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="isNewSprint = false">取消</el-button>
-        <el-button type="primary" @click="confirmNewSprint">确定</el-button>
+        <el-button @click="isNewSprint = false">Cancel</el-button>
+        <el-button type="primary" @click="confirmNewSprint">Confirm</el-button>
       </div>
     </el-dialog>
   </div>
@@ -223,6 +223,9 @@ export default {
     projectIndex(to, from) {
       this.sprintIndex = 0;
       this.getSprints();
+      this.getRequires();
+      this.getTasks();
+      this.getDefects();
     },
     sprintIndex(to, from) {
       this.getRequires();
@@ -313,7 +316,7 @@ export default {
       var sprintID = this.sprintsList[this.sprintIndex].ID;
       this.axios
         .post(
-          this._GLOBAL.baseUrl + "/requirement/getReqtListByPID?ID=" + sprintID
+          this._GLOBAL.baseUrl + "/requirement/getReqtListBySID?ID=" + sprintID
         )
         .then((response) => {
           if (response.data.message == "成功") {

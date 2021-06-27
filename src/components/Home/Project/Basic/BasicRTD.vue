@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="10">
         <el-card>
           <div slot="header">Task</div>
           <el-row :gutter="20">
@@ -26,13 +26,15 @@
           </el-row>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="14">
         <el-card>
           <div slot="header">Project distribution</div>
-          <el-col :span="12" :offset="2">
-            <div id="main" style="width: 200px; height:168px; align-content: center;"></div>
+          <el-col :span="14" :offset="2">
+            <div id="main" style="width: 300px; height:168px; align-content: center;"></div>
           </el-col>
-          <el-col :span="8" :offset="1">
+          <el-col :span="4" :offset="1">
+            <p></p>
+            <br />
             <p>Require: {{rCnt}}</p>
             <br />
             <p>Task: {{count}}</p>
@@ -131,7 +133,7 @@ export default {
               else if (task.state == "未开始") this.nostarting++;
               else this.processing++;
             }
-            this.percentage = (this.already / this.count*100).toFixed(2);
+            this.percentage = this.count==0?0.00: (this.already / this.count*100).toFixed(2);
           }
         })
         .catch(function (error) {
@@ -171,7 +173,7 @@ export default {
           {
             //name: '访问来源',
             type: "pie", // 设置图表类型为饼图
-            radius: "80%", // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+            radius: "55%", // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
             data: [
               // 数据数组，name 为数据项名称，value 为数据项值
               {
